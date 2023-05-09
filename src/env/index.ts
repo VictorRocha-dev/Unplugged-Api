@@ -15,3 +15,5 @@ if(_env.success === false){
 }
 
 export const env = _env.data;
+
+// arquivo utilizado para fazer verificação das variaveis ambientes se tiverem erradas elas ira crashar a aplicação
