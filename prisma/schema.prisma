@@ -11,18 +11,18 @@ datasource db {
 }
 
 model User {
-  id            String @id @default(uuid())
-  name          String
-  email         String @unique
-  password_hash String
-  nickname      String @unique
-  img_user      String
-  street        String
-  number        Int
-  city          String
-  state         String
-  zip_code      String
-  reference     String
+  id        String @id @default(uuid())
+  name      String
+  email     String @unique
+  password  String
+  nickname  String
+  img_user  String
+  street    String
+  number    Int
+  city      String
+  state     String
+  zip_code  String
+  reference String
 
   @@map("users")
 }

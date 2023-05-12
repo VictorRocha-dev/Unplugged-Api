@@ -1,12 +1,15 @@
-import { CreateUserController } from "@/modules/user/useCases/createUser/createUserController";
-import { Router } from "express";
-const router  = Router();
-
-const createUserController = new CreateUserController(); //controller do usuario 
-
-
-//rotas do usuario do usuarios 
-router.post("/users", createUserController.handle);
+import { Router } from 'express';
+import { UserController } from './controllers/UserController';
+import { AuthController } from './controllers/AuthController';
+import {AuthMiddleware} from '@/middleware/auth';
 
 
-export {router};
+const userController = new UserController();
+const authController = new AuthController();
+
+
+export const router  = Router();
+
+router.post('/create' , userController.store);
+router.get('/users' , AuthMiddleware, userController.index);
+router.post('/auth' , authController.authenticate);

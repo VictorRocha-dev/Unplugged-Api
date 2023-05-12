@@ -6,6 +6,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use(router)
+app.use(router);
 app.listen(env.PORT, () => console.log('Server onc at http://localhost:3333'));
 
