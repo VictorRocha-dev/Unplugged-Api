@@ -48,3 +48,25 @@ model meditationCategory {
 
   @@map("meditationcategory")
 }
+
+model Binaural {
+  id                Int    @id @default(autoincrement())
+  binaural_name     String
+  binaural_sound    String
+  binaural_img      String
+  binaural_duration Int //duração em segundos  
+
+  binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
+  binauralCategoryId Int
+
+  @@map("binaural")
+}
+
+model binauralCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  binaural Binaural[]
+
+  @@map("binauralCategory")
+}
