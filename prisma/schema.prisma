@@ -26,3 +26,25 @@ model User {
 
   @@map("users")
 }
+
+model Meditation {
+  id                  Int    @id @default(autoincrement())
+  meditation_name     String
+  meditation_sound    String
+  meditation_img      String
+  meditation_duration Int //duração em segundos  
+
+  meditation_category  meditationCategory @relation(fields: [meditationCategoryId], references: [id])
+  meditationCategoryId Int
+
+  @@map("meditation")
+}
+
+model meditationCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  meditation Meditation[]
+
+  @@map("meditationcategory")
+}

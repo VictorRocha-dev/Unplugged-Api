@@ -6,7 +6,6 @@ export class UserController{
 
 	async index(req: Request , res: Response){
 		const users = await prisma.user.findMany();
-
 		return res.json({users});
 	}
 
@@ -55,6 +54,8 @@ export class UserController{
 		return res.json({user});
 
 	}
+
+	
 }
 
 
