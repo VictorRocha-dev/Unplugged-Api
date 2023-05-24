@@ -23,6 +23,7 @@ model User {
   state     String
   zip_code  String
   reference String
+  
 
   @@map("users")
 }
@@ -45,7 +46,6 @@ model meditationCategory {
   name String
 
   meditation Meditation[]
-
   @@map("meditationcategory")
 }
 
@@ -69,4 +69,19 @@ model binauralCategory {
   binaural Binaural[]
 
   @@map("binauralCategory")
+}
+
+
+model habits{
+  id Int    @id @default(autoincrement())
+  habits_description String 
+  habits_days String[]
+}
+
+
+model icons{
+  id   Int    @id @default(autoincrement())
+  image_url String 
+
+  @@map("icons")
 }
