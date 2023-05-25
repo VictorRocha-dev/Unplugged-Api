@@ -23,7 +23,8 @@ model User {
   state     String
   zip_code  String
   reference String
-  
+
+  habits Habits[]
 
   @@map("users")
 }
@@ -46,6 +47,7 @@ model meditationCategory {
   name String
 
   meditation Meditation[]
+
   @@map("meditationcategory")
 }
 
@@ -71,17 +73,26 @@ model binauralCategory {
   @@map("binauralCategory")
 }
 
+model Habits {
+  id                  Int      @id @default(autoincrement())
+  habits_description  String
+  habits_hours_start  DateTime
+  habits_hours_finish DateTime
+  habits_days         String
+  icons               icons    @relation(fields: [iconsId], references: [id])
+  iconsId             Int
 
-model habits{
-  id Int    @id @default(autoincrement())
-  habits_description String 
-  habits_days String[]
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("habits")
 }
 
-
-model icons{
-  id   Int    @id @default(autoincrement())
-  image_url String 
+model icons {
+  id        Int      @id @default(autoincrement())
+  name      String
+  image_url String
+  habits    Habits[]
 
   @@map("icons")
 }
