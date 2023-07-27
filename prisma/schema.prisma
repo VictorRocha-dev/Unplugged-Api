@@ -24,7 +24,7 @@ model User {
   zip_code  String
   reference String
 
-  habits Habits[]
+  comments comments[]
 
   @@map("users")
 }
@@ -73,26 +73,42 @@ model binauralCategory {
   @@map("binauralCategory")
 }
 
-model Habits {
-  id                  Int      @id @default(autoincrement())
-  habits_description  String
-  habits_hours_start  DateTime
-  habits_hours_finish DateTime
-  habits_days         String
-  icons               icons    @relation(fields: [iconsId], references: [id])
-  iconsId             Int
+model modules {
+  id                 Int    @id @default(autoincrement())
+  module_name        String
+  module_description String
+
+  contents contents[]
+
+  @@map("modules")
+}
+
+model contents {
+  id                 Int     @id @default(autoincrement())
+  contents_name      String
+  contents_type      String  @default("video")
+  contents_video_url String?
+  contents_article   String?
+
+  modules   modules @relation(fields: [modulesId], references: [id])
+  modulesId Int
+
+  comments comments[]
+
+  @@map("contents")
+}
+
+model comments {
+  id              Int    @id @default(autoincrement())
+  comments_text   String
+  comments_rating Int
+  comments_likes  Int    @default(0)
+
+  contents   contents @relation(fields: [contentsId], references: [id])
+  contentsId Int
 
   User   User   @relation(fields: [userId], references: [id])
   userId String
 
-  @@map("habits")
-}
-
-model icons {
-  id        Int      @id @default(autoincrement())
-  name      String
-  image_url String
-  habits    Habits[]
-
-  @@map("icons")
+  @@map("comments ")
 }
