@@ -35,6 +35,7 @@ model Meditation {
   meditation_sound    String
   meditation_img      String
   meditation_duration Int //duração em segundos  
+  
 
   meditation_category  meditationCategory @relation(fields: [meditationCategoryId], references: [id])
   meditationCategoryId Int
@@ -57,7 +58,7 @@ model Binaural {
   binaural_sound    String
   binaural_img      String
   binaural_duration Int //duração em segundos  
-
+  isFavorited       Boolean @default(false)
   binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
   binauralCategoryId Int
 
