@@ -4,12 +4,15 @@ import { AuthController } from './controllers/AuthController';
 import {AuthMiddleware} from '@/middleware/auth';
 import { MeditationController } from './controllers/MeditationController';
 import { BinauralController } from './controllers/BinauralController';
+import { CommentController } from './controllers/CommentsController';
 
 
 const userController = new UserController();
 const authController = new AuthController();
 const meditationController = new MeditationController();
 const binauralController = new BinauralController();
+
+const commentController = new CommentController();
 
 
 
@@ -19,6 +22,8 @@ export const router  = Router();
 router.get('/users' , AuthMiddleware, userController.index);
 router.post('/create' , userController.store);
 router.post('/auth' , authController.authenticate);
+
+router.post('/add-comment', commentController.addComment);
 
 //meditation
 router.get('/meditations' , meditationController.listMeditation);

@@ -10,6 +10,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+////finalizados
+model Meditation {
+  id                  Int    @id @default(autoincrement())
+  meditation_name     String
+  meditation_sound    String
+  meditation_img      String
+  meditation_duration Int //duração em segundos  
+
+  meditation_category  meditationCategory @relation(fields: [meditationCategoryId], references: [id])
+  meditationCategoryId Int
+
+  @@map("meditation")
+}
+
+model meditationCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  meditation Meditation[]
+
+  @@map("meditationcategory")
+}
+
+model binauralCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  binaural Binaural[]
+
+  @@map("binauralCategory")
+}
+
+/// fazendo
+
 model User {
   id        String @id @default(uuid())
   name      String
@@ -29,49 +63,18 @@ model User {
   @@map("users")
 }
 
-model Meditation {
-  id                  Int    @id @default(autoincrement())
-  meditation_name     String
-  meditation_sound    String
-  meditation_img      String
-  meditation_duration Int //duração em segundos  
-  
-
-  meditation_category  meditationCategory @relation(fields: [meditationCategoryId], references: [id])
-  meditationCategoryId Int
-
-  @@map("meditation")
-}
-
-model meditationCategory {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  meditation Meditation[]
-
-  @@map("meditationcategory")
-}
-
 model Binaural {
-  id                Int    @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
   binaural_name     String
   binaural_sound    String
   binaural_img      String
   binaural_duration Int //duração em segundos  
   isFavorited       Boolean @default(false)
+
   binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
   binauralCategoryId Int
 
   @@map("binaural")
-}
-
-model binauralCategory {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  binaural Binaural[]
-
-  @@map("binauralCategory")
 }
 
 model modules {
@@ -105,11 +108,13 @@ model comments {
   comments_rating Int
   comments_likes  Int    @default(0)
 
-  contents   contents @relation(fields: [contentsId], references: [id])
+  contents   contents? @relation(fields: [contentsId], references: [id])
   contentsId Int
 
-  User   User   @relation(fields: [userId], references: [id])
+  User   User?  @relation(fields: [userId], references: [id])
   userId String
 
-  @@map("comments ")
+  @@map("comments")
 }
+
+// horario e quantidade nao fazem sentido 
