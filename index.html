@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Contents</title>
+</head>
+<body>
+  <h1>Video Contents</h1>
+  <div id="videoList"></div>
+
+  <script>
+    async function fetchVideos() {
+      try {
+        const response = await fetch('http://localhost:3333/api/contents'); // Use a rota correta para buscar os vídeos
+        const data = await response.json();
+
+        const videoListDiv = document.getElementById('videoList');
+        data.contents.forEach(video => {
+          if (video.contents_type === 'video' && video.contents_video_url.endsWith('.mp4')) {
+            const videoName = document.createElement('p');
+            videoName.textContent = video.contents_name;
+
+            const playButton = document.createElement('button');
+            playButton.textContent = 'Play';
+            playButton.addEventListener('click', () => {
+              window.location.href = `http://localhost:3333/api/contents/${video.id}`; // URL correta
+            });
+
+            videoListDiv.appendChild(videoName);
+            videoListDiv.appendChild(playButton);
+            videoListDiv.appendChild(document.createElement('br'));
+          }
+        });
+      } catch (error) {
+        console.error('Erro ao buscar vídeos:', error);
+      }
+    }
+
+    fetchVideos();
+  </script>
+</body>
+</html>
