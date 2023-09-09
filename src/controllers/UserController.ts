@@ -11,13 +11,41 @@ export class UserController {
 	// Listar todos os usuários
 	async index(req: Request, res: Response) {
 		try {
-			const users = await prisma.user.findMany();
+			const userWithContentCount = await prisma.user.findMany({
+				include:{
+					Habit:{
+						select:{
+							id: true
+						}
+					}
+				}
+			});
+			const users = userWithContentCount.map((users) => ({
+				id: users.id,
+				name: users.name,
+				email: users.email,
+				password: users.password,
+				nickname: users.nickname,
+				img_user: users.img_user,
+				street: users.street,
+				number: users.number,
+				city: users.city,
+				state: users.state,
+				zip_code: users.zip_code,
+				reference: users.reference,
+				habits_count: users.Habit.length
+
+				
+			}));
+
+
 			return res.json({ users });
 		} catch (error) {
 			console.error('Erro ao listar usuários:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+
 
 	// Criar novo usuário
 	async store(req: Request, res: Response) {

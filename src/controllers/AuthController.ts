@@ -6,7 +6,7 @@ import { env } from '@/env';
 
 export class AuthController {
 
-	// Autenticação do usuário
+	
 	async authenticate(req: Request, res: Response) {
 		try {
 			const { email, password } = req.body;
@@ -44,4 +44,29 @@ export class AuthController {
 			return res.status(500).json({ error: 'Internal server error' });
 		}
 	}
-}
+
+
+	async userAuthentication(req: Request, res: Response) {
+		try {
+			
+			const userId = req.user.id; 
+
+			
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId,
+				},
+			});
+
+			if (!user) {
+				return res.status(404).json({ error: 'User not found' });
+			}
+
+
+			return res.json({ message: 'Acesso autorizado', user });
+		} catch (error) {
+			console.error('Erro na rota protegida:', error);
+			return res.status(500).json({ error: 'Internal server error' });
+		}
+	}
+}	

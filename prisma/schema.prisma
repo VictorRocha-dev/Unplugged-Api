@@ -10,7 +10,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-////finalizados
+model User {
+  id        String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  password  String
+  nickname  String
+  img_user  String?
+  street    String?
+  number    Int?
+  city      String?
+  state     String?
+  zip_code  String?
+  reference String?
+
+  comments         Comments[]
+  Habit            Habit[]
+  BinauralFavorite BinauralFavorite[]
+
+  @@map("users")
+}
+
+model Binaural {
+  id                Int    @id @default(autoincrement())
+  binaural_name     String
+  binaural_sound    String
+  binaural_img      String
+  binaural_duration Int //duração em segundos  
+
+  binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
+  binauralCategoryId Int
+
+  BinauralFavorite BinauralFavorite[]
+
+  @@map("binaural")
+}
+
+model binauralCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  binaural Binaural[]
+
+  @@map("binauralCategory")
+}
+
+model BinauralFavorite {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  binauralId Int
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  binaural Binaural @relation(fields: [binauralId], references: [id])
+
+  @@unique([userId, binauralId])
+  @@map("binaural_favorites")
+}
+
 model Meditation {
   id                  Int    @id @default(autoincrement())
   meditation_name     String
@@ -33,77 +90,32 @@ model meditationCategory {
   @@map("meditationcategory")
 }
 
-model binauralCategory {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  binaural Binaural[]
-
-  @@map("binauralCategory")
-}
-
-/// fazendo
-
-model User {
-  id        String  @id @default(uuid())
-  name      String
-  email     String  @unique
-  password  String
-  nickname  String
-  img_user  String?
-  street    String?
-  number    Int?
-  city      String?
-  state     String?
-  zip_code  String?
-  reference String?
-
-  comments comments[]
-  Habit    Habit[]
-
-  @@map("users")
-}
-
-model Binaural {
-  id                Int     @id @default(autoincrement())
-  binaural_name     String
-  binaural_sound    String
-  binaural_img      String
-  binaural_duration Int //duração em segundos  
-  isFavorited       Boolean @default(false)
-
-  binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
-  binauralCategoryId Int
-
-  @@map("binaural")
-}
-
-model modules {
+model Modules {
   id                 Int    @id @default(autoincrement())
   module_name        String
   module_description String
 
-  contents contents[]
+  contents Contents[]
 
   @@map("modules")
 }
 
-model contents {
+model Contents {
   id                 Int     @id @default(autoincrement())
   contents_name      String
   contents_type      String  @default("video")
   contents_video_url String?
   contents_article   String?
 
-  modules   modules @relation(fields: [modulesId], references: [id])
+  modules   Modules @relation(fields: [modulesId], references: [id])
   modulesId Int
 
-  comments comments[]
+  comments Comments[]
 
   @@map("contents")
 }
 
-model comments {
+model Comments {
   id              Int    @id @default(autoincrement())
   comments_text   String
   comments_rating Int
@@ -111,7 +123,7 @@ model comments {
 
   created_at DateTime @default(now())
 
-  contents   contents? @relation(fields: [contentsId], references: [id])
+  contents   Contents? @relation(fields: [contentsId], references: [id])
   contentsId Int
 
   User   User?  @relation(fields: [userId], references: [id])
@@ -133,6 +145,8 @@ model Habit {
   user           User            @relation(fields: [userId], references: [id])
   habitSchedules HabitSchedule[]
   habitLogs      HabitLog[] // Relação com os registros de hábitos
+
+  @@map("habit")
 }
 
 model HabitSchedule {
@@ -141,6 +155,8 @@ model HabitSchedule {
   dayOfWeek Int // Dia da semana (domingo: 0, segunda: 1, ..., sábado: 6)
 
   habit Habit @relation(fields: [habitId], references: [id])
+
+  @@map("habit_schedule")
 }
 
 model HabitLog {
@@ -153,4 +169,6 @@ model HabitLog {
   updatedAt DateTime @updatedAt
 
   habit Habit @relation(fields: [habitId], references: [id])
+
+  @@map("habit_log")
 }

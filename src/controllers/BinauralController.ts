@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import { prisma } from '@/utils/prisma';
+import path from 'path';
 
 export class BinauralController {
-	// Listar todos os binaurais com suas categorias
+
+	// Listagem
 	async listBinaural(req: Request, res: Response) {
 		try {
 			const binaurals = await prisma.binaural.findMany({
@@ -21,7 +23,6 @@ export class BinauralController {
 		}
 	}
 
-	// Listar todas as categorias de binaurais com seus detalhes
 	async listCategory(req: Request, res: Response) {
 		try {
 			const binauralCategory = await prisma.binauralCategory.findMany({
@@ -44,7 +45,7 @@ export class BinauralController {
 		}
 	}
 
-	// Criar nova categoria de binaurais
+	// Criação
 	async createCategory(req: Request, res: Response) {
 		try {
 			const { name } = req.body;
@@ -60,7 +61,6 @@ export class BinauralController {
 		}
 	}
 
-	// Criar novo binaural
 	async createBinaural(req: Request, res: Response) {
 		try {
 			const {
@@ -86,6 +86,148 @@ export class BinauralController {
 			return res.json(create);
 		} catch (error) {
 			console.error('Erro ao criar binaural:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	// Audio
+	async getAudio(req: Request, res: Response) {
+		try {
+			const audioId = parseInt(req.params.audioId);
+
+			const audio = await prisma.binaural.findUnique({
+				where: { id: audioId },
+			});
+
+			if (!audio) {
+				return res.status(404).json({ error: 'Áudio não encontrado' });
+			}
+
+			const audioPath = path.join(__dirname, '../audios/binaural', audio.binaural_sound);
+
+			res.sendFile(audioPath);
+		} catch (error) {
+			console.error('Erro ao entregar áudio:', error);
+			res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	// Favoritos
+	async favoriteBinaural(req: Request, res: Response) {
+		try {
+			const { userId, binauralId } = req.body;
+
+			const favorite = await prisma.binauralFavorite.create({
+				data: {
+					userId,
+					binauralId,
+				},
+			});
+
+			return res.json(favorite);
+		} catch (error) {
+			console.error('Erro ao favoritar som binaural:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async unfavoriteBinaural(req: Request, res: Response) {
+		try {
+			const { userId, binauralId } = req.body;
+
+			await prisma.binauralFavorite.deleteMany({
+				where: {
+					userId,
+					binauralId,
+				},
+			});
+
+			return res.json({ message: 'Som binaural desfavoritado com sucesso' });
+		} catch (error) {
+			console.error('Erro ao desfavoritar som binaural:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	// Update
+	async updateCategory(req: Request, res: Response) {
+		try {
+			const categoryId = parseInt(req.params.categoryId);
+			const { name } = req.body;
+
+			const updatedCategory = await prisma.binauralCategory.update({
+				where: { id: categoryId },
+				data: {
+					name,
+				},
+			});
+
+			return res.json(updatedCategory);
+		} catch (error) {
+			console.error('Erro ao atualizar categoria de binaurais:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async updateBinaural(req: Request, res: Response) {
+		try {
+			const binauralId = parseInt(req.params.binauralId);
+			const {
+				binaural_name,
+				binaural_sound,
+				binaural_img,
+				binaural_duration,
+				binauralCategoryId,
+			} = req.body;
+
+			const updatedBinaural = await prisma.binaural.update({
+				where: { id: binauralId },
+				data: {
+					binaural_name,
+					binaural_sound,
+					binaural_img,
+					binaural_duration,
+					binauralCategory: {
+						connect: { id: binauralCategoryId },
+					},
+				},
+			});
+
+			return res.json(updatedBinaural);
+		} catch (error) {
+			console.error('Erro ao atualizar som binaural:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	// Delete
+	async deleteCategory(req: Request, res: Response) {
+		try {
+			const categoryId = parseInt(req.params.categoryId);
+			
+
+			await prisma.binauralCategory.delete({
+				where: { id: categoryId },
+			});
+
+			return res.json({ message: 'Categoria excluída com sucesso' });
+		} catch (error) {
+			console.error('Erro ao excluir categoria de binaurais:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async deleteBinaural(req: Request, res: Response) {
+		try {
+			const binauralId = parseInt(req.params.binauralId);
+
+			await prisma.binaural.delete({
+				where: { id: binauralId },
+			});
+
+			return res.json({ message: 'Som binaural excluído com sucesso' });
+		} catch (error) {
+			console.error('Erro ao excluir som binaural:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
