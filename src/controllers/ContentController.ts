@@ -29,7 +29,7 @@ export class ContentController {
 				content_video_url: content.contents_video_url,
 				content_article: content.contents_article,
 				content_Module_id: content.modulesId,
-				content_Module_name: content.modules,
+				content_Module_name: content.modules.module_name,
 				content_comments: content.comments.length,
 			}));
 
@@ -42,8 +42,10 @@ export class ContentController {
 			return res.status(500).json({ error: 'Ocorreu um erro ao buscar os conteúdos' });
 		}
 	}
-
-	// Criar novo conteudo
+ 
+	async  responsevideomove(req: Request, res: Response){
+		res.send('Video postado');
+	}
 
 	async createContent(req: Request, res: Response) {
 		const {
@@ -86,11 +88,12 @@ export class ContentController {
 	async getVideo(req: Request, res: Response) {
 		try {
 			const videoId = parseInt(req.params.videoId);
-
+			
 			const video = await prisma.contents.findUnique({
 				where: { id: videoId },
 			});
-
+			console.log(video);
+			
 			if (!video) {
 				return res.status(404).json({ error: 'Vídeo não encontrado' });
 			}

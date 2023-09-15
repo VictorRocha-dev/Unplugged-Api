@@ -30,6 +30,42 @@ export class ModuleController {
 		}
 	}
 
+	async listUniqueModule(req: Request, res: Response){
+		try{
+			const moduleId = parseInt(req.params.moduleId);
+
+			const module = await prisma.modules.findUnique({
+				where:{
+					id: moduleId,
+				},
+				include:{
+					contents:{
+						select:{
+							id:true,
+							contents_name:true,
+							contents_type:true,
+							contents_video_url:true,
+							contents_article:true,
+						}
+					}
+				}
+			});
+
+			if (!module) {
+				return res.status(404).json({ error: 'Modulo não encontrado' });
+			}
+
+			return res.json(module);
+			
+
+		}
+		catch (error) {
+			console.error('Erro ao entregar vídeo:', error);
+			res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+
+	}
+
 	// Criar um novo módulo
 	async createModule(req: Request, res: Response) {
 		const { module_name, module_description } = req.body;

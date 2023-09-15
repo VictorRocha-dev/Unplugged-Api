@@ -1,43 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Contents</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-  <h1>Video Contents</h1>
-  <div id="videoList"></div>
+    <h1>Upar vídeo</h1>
 
-  <script>
-    async function fetchVideos() {
-      try {
-        const response = await fetch('http://localhost:3333/api/contents'); // Use a rota correta para buscar os vídeos
-        const data = await response.json();
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="videoInput" name="video">
+        <input type="button" value="Enviar" onclick="uploadVideo()">
+    </form>
 
-        const videoListDiv = document.getElementById('videoList');
-        data.contents.forEach(video => {
-          if (video.contents_type === 'video' && video.contents_video_url.endsWith('.mp4')) {
-            const videoName = document.createElement('p');
-            videoName.textContent = video.contents_name;
+    <script>
+        function uploadVideo() {
+            var form = document.getElementById("uploadForm");
+            var fileInput = document.getElementById("videoInput");
 
-            const playButton = document.createElement('button');
-            playButton.textContent = 'Play';
-            playButton.addEventListener('click', () => {
-              window.location.href = `http://localhost:3333/api/contents/${video.id}`; // URL correta
-            });
+            var formData = new FormData(form);
 
-            videoListDiv.appendChild(videoName);
-            videoListDiv.appendChild(playButton);
-            videoListDiv.appendChild(document.createElement('br'));
-          }
-        });
-      } catch (error) {
-        console.error('Erro ao buscar vídeos:', error);
-      }
-    }
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:3333/api/contents/postvideo", true);
 
-    fetchVideos();
-  </script>
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        alert("Vídeo enviado com sucesso!");
+                    } else {
+                        alert("Erro ao enviar o vídeo.");
+                    }
+                }
+            };
+
+            xhr.send(formData);
+        }
+    </script>
 </body>
 </html>

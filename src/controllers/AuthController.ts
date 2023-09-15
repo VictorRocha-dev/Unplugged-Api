@@ -38,7 +38,7 @@ export class AuthController {
 			const { id } = user;
 
 			// Retorna os dados do usuário e o token de autenticação
-			return res.json({ user: { id, email }, token });
+			return res.json({ user , token });
 		} catch (error) {
 			console.error('Erro na autenticação:', error);
 			return res.status(500).json({ error: 'Internal server error' });
