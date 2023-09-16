@@ -48,10 +48,11 @@ export class BinauralController {
 	// Criação
 	async createCategory(req: Request, res: Response) {
 		try {
-			const { name } = req.body;
+			const { name , images } = req.body;
 			const create = await prisma.binauralCategory.create({
 				data: {
 					name,
+					images
 				},
 			});
 			return res.json(create);
@@ -155,12 +156,13 @@ export class BinauralController {
 	async updateCategory(req: Request, res: Response) {
 		try {
 			const categoryId = parseInt(req.params.categoryId);
-			const { name } = req.body;
+			const { name,images } = req.body;
 
 			const updatedCategory = await prisma.binauralCategory.update({
 				where: { id: categoryId },
 				data: {
 					name,
+					images,
 				},
 			});
 

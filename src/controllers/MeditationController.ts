@@ -52,7 +52,7 @@ export class MeditationController {
 		try {
 			const create = await prisma.meditationCategory.create({
 				data: {
-					name
+					name,
 				}
 			});
 			return res.json(create);

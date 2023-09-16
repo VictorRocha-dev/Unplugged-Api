@@ -14,6 +14,8 @@ export class ModuleController {
 							contents_name:true,
 							contents_type:true,
 							contents_video_url:true,
+							contets_duration:true,
+							contents_article: true,
 						}
 					}
 				}
