@@ -21,6 +21,7 @@ CREATE TABLE "binaural" (
     "binaural_sound" TEXT NOT NULL,
     "binaural_img" TEXT NOT NULL,
     "binaural_duration" INTEGER NOT NULL,
+    "binaral_autor" TEXT NOT NULL,
     "binauralCategoryId" INTEGER NOT NULL,
     CONSTRAINT "binaural_binauralCategoryId_fkey" FOREIGN KEY ("binauralCategoryId") REFERENCES "binauralCategory" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -48,6 +49,7 @@ CREATE TABLE "meditation" (
     "meditation_sound" TEXT NOT NULL,
     "meditation_img" TEXT NOT NULL,
     "meditation_duration" INTEGER NOT NULL,
+    "Meditation_autor" TEXT NOT NULL,
     "meditationCategoryId" INTEGER NOT NULL,
     CONSTRAINT "meditation_meditationCategoryId_fkey" FOREIGN KEY ("meditationCategoryId") REFERENCES "meditationcategory" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

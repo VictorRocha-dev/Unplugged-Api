@@ -32,12 +32,12 @@ model User {
 }
 
 model Binaural {
-  id                Int    @id @default(autoincrement())
-  binaural_name     String
-  binaural_sound    String
-  binaural_img      String
-  binaural_duration Int //duração em segundos  
-
+  id                 Int               @id @default(autoincrement())
+  binaural_name      String
+  binaural_sound     String
+  binaural_img       String
+  binaural_duration  Int
+  binaral_autor      String
   binauralCategory   binauralCategory? @relation(fields: [binauralCategoryId], references: [id])
   binauralCategoryId Int
 
@@ -69,12 +69,12 @@ model BinauralFavorite {
 }
 
 model Meditation {
-  id                  Int    @id @default(autoincrement())
-  meditation_name     String
-  meditation_sound    String
-  meditation_img      String
-  meditation_duration Int //duração em segundos  
-
+  id                   Int                @id @default(autoincrement())
+  meditation_name      String
+  meditation_sound     String
+  meditation_img       String
+  meditation_duration  Int //duração em segundos  
+  Meditation_autor     String
   meditation_category  meditationCategory @relation(fields: [meditationCategoryId], references: [id])
   meditationCategoryId Int
 
@@ -104,11 +104,11 @@ model Contents {
   id                 Int     @id @default(autoincrement())
   contents_name      String
   contents_type      String  @default("video")
+  contets_duration   Int
   contents_video_url String?
   contents_article   String?
-
-  modules   Modules @relation(fields: [modulesId], references: [id])
-  modulesId Int
+  modules            Modules @relation(fields: [modulesId], references: [id])
+  modulesId          Int
 
   comments Comments[]
 

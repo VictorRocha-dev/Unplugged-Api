@@ -28,6 +28,7 @@ export class ContentController {
 				content_type: content.contents_type,
 				content_video_url: content.contents_video_url,
 				content_article: content.contents_article,
+				contents_duration: content.contets_duration,
 				content_Module_id: content.modulesId,
 				content_Module_name: content.modules.module_name,
 				content_comments: content.comments.length,
@@ -52,7 +53,9 @@ export class ContentController {
 			contents_name,
 			contents_type,
 			contents_video_url,
+			contets_duration,
 			contents_article,
+			
 			modulesId
 		} = req.body;
 
@@ -72,6 +75,7 @@ export class ContentController {
 					contents_name,
 					contents_type,
 					contents_video_url,
+					contets_duration,
 					contents_article,
 					modules: { connect: { id: modulesId } },
 				},

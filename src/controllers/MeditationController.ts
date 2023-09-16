@@ -68,6 +68,7 @@ export class MeditationController {
 			meditation_name,
 			meditation_sound,
 			meditation_img,
+			Meditation_autor,
 			meditation_duration,
 			meditationCategoryId
 		} = req.body;
@@ -78,6 +79,7 @@ export class MeditationController {
 					meditation_name,
 					meditation_sound,
 					meditation_img,
+					Meditation_autor,
 					meditation_duration,
 					meditation_category: {
 						connect: { id: meditationCategoryId }

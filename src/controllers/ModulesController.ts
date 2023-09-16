@@ -10,7 +10,10 @@ export class ModuleController {
 				include: {
 					contents: {
 						select: {
-							id: true
+							id: true,
+							contents_name:true,
+							contents_type:true,
+							contents_video_url:true,
 						}
 					}
 				}
@@ -20,6 +23,7 @@ export class ModuleController {
 				id: module.id,
 				module_name: module.module_name,
 				module_description: module.module_description,
+				contents: module.contents,
 				content_count: module.contents.length
 			}));
 

@@ -5,10 +5,10 @@ import { MeditationController } from '../controllers/MeditationController';
 const router = Router();
 const meditationController = new MeditationController();
 
-router.get('/meditations', meditationController.listMeditation);
+router.get('/', meditationController.listMeditation);
+router.post('/', meditationController.createMeditation);
 router.get('/meditationsCategory', meditationController.listCategory);
 router.post('/createMeditationCategory', meditationController.createCategory);
-router.post('/createMeditation', meditationController.createMeditation);
-router.get('/meditations/:audioId', meditationController.getAudio);
+router.get('/audioId', meditationController.getAudio);
 
 export default router;

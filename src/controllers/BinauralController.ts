@@ -67,6 +67,7 @@ export class BinauralController {
 				binaural_name,
 				binaural_sound,
 				binaural_img,
+				binaral_autor,
 				binaural_duration,
 				binauralCategoryId,
 			} = req.body;
@@ -76,6 +77,7 @@ export class BinauralController {
 					binaural_name,
 					binaural_sound,
 					binaural_img,
+					binaral_autor,
 					binaural_duration,
 					binauralCategory: {
 						connect: { id: binauralCategoryId },
