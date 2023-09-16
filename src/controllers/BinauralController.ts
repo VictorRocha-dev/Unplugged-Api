@@ -46,6 +46,33 @@ export class BinauralController {
 		}
 	}
 
+	async listCategoryById(req: Request, res: Response) {
+		try {
+			const {id} = req.params;
+			const binauralCategory = await prisma.binauralCategory.findUnique({
+				where:{
+					id:Number(id),
+				},
+				include: {
+					binaural: {
+						select: {
+							id: true,
+							binaural_name: true,
+							binaural_sound: true,
+							binaural_img: true,
+							binaural_duration: true,
+							binaral_autor:true
+						},
+					},
+				},
+			});
+			return res.json(binauralCategory);
+		} catch (error) {
+			console.error('Erro ao listar categorias de binaurais:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
 	// Criação
 	async createCategory(req: Request, res: Response) {
 		try {
@@ -137,14 +164,16 @@ export class BinauralController {
 
 	async unfavoriteBinaural(req: Request, res: Response) {
 		try {
-			const { userId, binauralId } = req.body;
-
+			const { userId, binauralId } = req.params;
 			await prisma.binauralFavorite.deleteMany({
 				where: {
 					userId,
-					binauralId,
+					binauralId:Number(binauralId),
 				},
 			});
+
+			console.log(userId, binauralId);
+			
 
 			return res.json({ message: 'Som binaural desfavoritado com sucesso' });
 		} catch (error) {
@@ -152,7 +181,34 @@ export class BinauralController {
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	async getFavorites(req: Request, res: Response) {
+		try{
+			const {userId} = req.params;
+			const getFavorites = await prisma.binauralFavorite.findMany({
+				where:{
+					userId
+				},
+				include: {
+					binaural: {
+						select: {
+							id: true,
+							binaural_name: true,
+							binaural_sound: true,
+							binaural_img: true,
+							binaural_duration: true,
+							binaral_autor:true
+						},
+					},
+				},
 
+			});
+			return res.json(getFavorites);
+		} catch (error) {
+			console.error('Erro ao desfavoritar som binaural:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+		
+	}
 	// Update
 	async updateCategory(req: Request, res: Response) {
 		try {
