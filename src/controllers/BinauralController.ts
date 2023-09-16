@@ -34,6 +34,7 @@ export class BinauralController {
 							binaural_sound: true,
 							binaural_img: true,
 							binaural_duration: true,
+							binaral_autor:true
 						},
 					},
 				},
