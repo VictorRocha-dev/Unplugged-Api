@@ -4,7 +4,7 @@ import { prisma } from '@/utils/prisma';
 export class HabitController {
 
 	async createHabit(req: Request, res: Response) {
-		const { userId, name, description, daysOfWeek } = req.body;
+		const { userId, name, description, daysOfWeek , color } = req.body;
 	
 		try {
 			const user = await prisma.user.findUnique({
@@ -21,6 +21,7 @@ export class HabitController {
 				data: {
 					name,
 					description,
+					color,
 					userId,
 					habitSchedules: {
 						create: daysOfWeek.map((day: number) => ({ dayOfWeek: day })),
