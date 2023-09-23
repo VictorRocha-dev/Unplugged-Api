@@ -166,8 +166,75 @@ export class HabitController {
 			return res.status(500).json({ error: 'An error occurred while completing the habit' });
 		}
 	}
+
+	async deleteHabit(req: Request, res: Response) {
+		try {
+			const habitId = parseInt(req.params.habitId);
+
+			// Exclua registros relacionados nas tabelas HabitSchedule e HabitLog
+			await prisma.habitSchedule.deleteMany({
+				where: {
+					habitId: habitId,
+				},
+			});
+
+			await prisma.habitLog.deleteMany({
+				where: {
+					habitId: habitId,
+				},
+			});
+
+			await prisma.habit.delete({
+				where: {
+					id: habitId,
+				},
+			});
+
+			return res.json({ message: 'Hábito excluído com sucesso' });
+		} catch (error) {
+			console.error('Erro ao excluir o hábito:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async getHabitsForWeek(req: Request, res: Response) {
+		try {
+			const userId = req.query.userId as string;
+
+			const currentDayOfWeek = new Date().getDay();
+
+			const daysRemainingInWeek = 7 - currentDayOfWeek;
+
+			const currentDate = new Date();
+			const nextWeekStartDate = new Date(currentDate);
+			nextWeekStartDate.setDate(currentDate.getDate() + daysRemainingInWeek);
+
+			const habitsForWeek = await prisma.habit.findMany({
+				where: {
+					userId: userId,
+					habitSchedules: {
+						some: {
+							dayOfWeek: {
+								in: Array.from({ length: 7 }, (_, i) => (i + currentDayOfWeek) % 7), 
+							},
+						},
+					},
+				},
+				include: {
+					habitLogs: true, 
+				},
+			});
+
+			return res.json(habitsForWeek);
+		} catch (error) {
+			console.error('Error fetching habits for the week:', error);
+			return res.status(500).json({ error: 'An error occurred while fetching habits for the week' });
+		}
+	}
+
+
+}
 	
 
 
 
-}

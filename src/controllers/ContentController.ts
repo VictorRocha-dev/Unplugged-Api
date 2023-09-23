@@ -125,7 +125,9 @@ export class ContentController {
 				contents_name,
 				contents_type,
 				contents_video_url,
+				contents_duration,
 				contents_article,
+				modulesId
 			} = req.body;
 
 			const updatedContent = await prisma.contents.update({
@@ -134,7 +136,9 @@ export class ContentController {
 					contents_name,
 					contents_type,
 					contents_video_url,
+					contets_duration: contents_duration,
 					contents_article,
+					modules: { connect: { id: modulesId } },
 				},
 			});
 
