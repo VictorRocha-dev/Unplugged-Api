@@ -11,5 +11,6 @@ router.get('/:videoId', contentController.getVideo);
 router.put('/:contentId', contentController.updateContent);
 router.post('/postvideo' , upload.single('video') , contentController.responsevideomove);
 router.put('/:idcontent' , contentController.updateContent);
+router.delete('/:contentId' , contentController.deleteContent);
 
 export default router;

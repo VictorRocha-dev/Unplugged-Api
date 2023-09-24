@@ -92,7 +92,7 @@ export class HabitController {
 
 
 	async getCompletedHabits(req: Request, res: Response) {
-		const { userId } = req.query;
+		const { userId } = req.params;
 	
 		try {
 			const completedHabits = await prisma.habitLog.findMany({

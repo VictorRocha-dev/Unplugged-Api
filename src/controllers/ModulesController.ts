@@ -111,20 +111,43 @@ export class ModuleController {
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	// Importe também o 'prisma' relacionado às tabelas
 
-	// Excluir um módulo específico
+	// ...
+
 	async deleteModule(req: Request, res: Response) {
 		try {
 			const moduleId = parseInt(req.params.moduleId);
 
-			await prisma.modules.delete({
+			// Verifique se o módulo existe
+			const module = await prisma.modules.findUnique({
+				where: {
+					id: moduleId,
+				},
+			});
+
+			if (!module) {
+				return res.status(404).json({ error: 'Módulo não encontrado.' });
+			}
+
+			// Exclua todos os conteúdos relacionados a este módulo
+			await prisma.contents.deleteMany({
+				where: {
+					modulesId: moduleId,
+				},
+			});
+
+			// Agora, você pode excluir o próprio módulo
+			const deletedModule = await prisma.modules.delete({
 				where: { id: moduleId },
 			});
 
-			return res.json({ message: 'Módulo excluído com sucesso' });
+			return res.json({ message: 'Módulo e seus conteúdos relacionados foram excluídos com sucesso.' });
 		} catch (error) {
-			console.error('Erro ao excluir o módulo:', error);
+			console.error('Erro ao excluir o módulo e seus conteúdos relacionados:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+
+
 }

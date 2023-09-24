@@ -149,17 +149,34 @@ export class ContentController {
 		}
 	}
 
-	// Excluir um conteúdo específico
 	async deleteContent(req: Request, res: Response) {
 		try {
 			const contentId = parseInt(req.params.contentId);
+
+			const content = await prisma.contents.findUnique({
+				where: {
+					id: contentId,
+				},
+			});
+
+			if (!content) {
+				return res.status(404).json({ error: 'Módulo não encontrado.' });
+			}
+
+			await prisma.comments.deleteMany({
+				where: {
+					contentsId: contentId,
+				},
+			});
+
 
 			await prisma.contents.delete({
 				where: { id: contentId },
 			});
 
 			return res.json({ message: 'Conteúdo excluído com sucesso' });
-		} catch (error) {
+		} 
+		catch (error) {
 			console.error('Erro ao excluir o conteúdo:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}

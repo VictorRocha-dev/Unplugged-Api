@@ -7,7 +7,7 @@ const habitController = new HabitController();
 router.post('/', habitController.createHabit);
 router.post('/complete', habitController.completeHabit);
 router.get('/today/:userId', habitController.getHabitsForToday);
-router.get('/completed', habitController.getCompletedHabits);
+router.get('/completed/:userId', habitController.getCompletedHabits);
 router.delete('/:habitId' , habitController.deleteHabit);
 router.get('/week/:userId' , habitController.getHabitsForWeek);
 router.get('/:userId/dayOfWeek/:dayOfWeek', habitController.getHabitsByDayOfWeek);

@@ -10,3 +10,4 @@ router.get('/', commentController.index);
 router.post('/:commentId/like', commentController.likeComment);
 
 export default router;
+ 
