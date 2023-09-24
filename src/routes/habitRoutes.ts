@@ -5,10 +5,10 @@ const router = Router();
 const habitController = new HabitController();
 
 router.post('/', habitController.createHabit);
-router.post('/complete/:habitId', habitController.completeHabit);
-router.get('/today', habitController.getHabitsForToday);
+router.post('/complete', habitController.completeHabit);
+router.get('/today/:userId', habitController.getHabitsForToday);
 router.get('/completed', habitController.getCompletedHabits);
 router.delete('/:habitId' , habitController.deleteHabit);
-router.get('/week' , habitController.getHabitsForWeek);
+router.get('/week/:userId' , habitController.getHabitsForWeek);
 
 export default router;

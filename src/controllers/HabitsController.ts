@@ -67,7 +67,7 @@ export class HabitController {
 
 	async getHabitsForToday(req: Request, res: Response) {
 		try {
-			const userId = req.query.userId as string;
+			const userId = req.params.userId as string;
 			const currentDayOfWeek = new Date().getDay();
 	
 			const habitsForToday = await prisma.habit.findMany({
@@ -101,8 +101,7 @@ export class HabitController {
 	}
 
 	async completeHabit(req: Request, res: Response) {
-		const habitId = parseInt(req.params.habitId);
-		const { dayOfWeek, userId } = req.body;
+		const { dayOfWeek, userId , habitId} = req.body;
 	
 		try {
 			const habit = await prisma.habit.findFirst({
@@ -199,7 +198,7 @@ export class HabitController {
 
 	async getHabitsForWeek(req: Request, res: Response) {
 		try {
-			const userId = req.query.userId as string;
+			const userId = req.params.userId as string;
 
 			const currentDayOfWeek = new Date().getDay();
 
