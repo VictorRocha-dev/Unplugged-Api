@@ -39,6 +39,57 @@ export class HabitController {
 		}
 	}
 	
+	async getHabitsByDayOfWeek(req: Request, res: Response) {
+		try {
+			const userId = req.params.userId as string;
+			const dayOfWeek = parseInt(req.params.dayOfWeek);
+
+			const habitsByDayOfWeek = await prisma.habit.findMany({
+				where: {
+					userId: userId,
+					habitSchedules: {
+						some: {
+							dayOfWeek: dayOfWeek,
+						},
+					},
+				},
+				include: {
+					habitLogs: true, // Inclua os registros de hábitos relacionados
+				},
+			});
+
+			return res.json(habitsByDayOfWeek);
+		} catch (error) {
+			console.error('Error fetching habits by day of week:', error);
+			return res.status(500).json({ error: 'An error occurred while fetching habits by day of week' });
+		}
+	}
+	
+	async getCompletedHabitsByDayOfWeek(req: Request, res: Response) {
+		try {
+			const userId = req.params.userId as string;
+			const dayOfWeek = parseInt(req.params.dayOfWeek);
+
+			const completedHabitsByDayOfWeek = await prisma.habitLog.findMany({
+				where: {
+					habit: {
+						userId: userId,
+					},
+					completed: true,
+					dayOfWeek: dayOfWeek,
+				},
+				include: {
+					habit: true, // Inclua os detalhes do hábito relacionado
+				},
+			});
+
+			return res.json(completedHabitsByDayOfWeek);
+		} catch (error) {
+			console.error('Error fetching completed habits by day of week:', error);
+			return res.status(500).json({ error: 'An error occurred while fetching completed habits by day of week' });
+		}
+	}
+
 
 	async getCompletedHabits(req: Request, res: Response) {
 		const { userId } = req.query;
