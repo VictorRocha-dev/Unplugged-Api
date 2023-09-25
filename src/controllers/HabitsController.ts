@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { prisma } from '@/utils/prisma';
 
+function getCurrentDateTimeInBrasilia() {
+	const now = new Date();
+	now.setHours(now.getHours() - 3);
+	return now;
+}
 export class HabitController {
 
 	async createHabit(req: Request, res: Response) {
@@ -12,6 +17,7 @@ export class HabitController {
 					id: userId,
 				},
 			});
+
 	
 			if (!user) {
 				return res.status(404).json('Usuário não encontrado');
@@ -22,6 +28,7 @@ export class HabitController {
 					name,
 					description,
 					color,
+					createdAt: getCurrentDateTimeInBrasilia(),
 					userId,
 					habitSchedules: {
 						create: daysOfWeek.map((day: number) => ({ dayOfWeek: day })),
@@ -79,7 +86,7 @@ export class HabitController {
 					dayOfWeek: dayOfWeek,
 				},
 				include: {
-					habit: true, // Inclua os detalhes do hábito relacionado
+					habit: true, 
 				},
 			});
 
