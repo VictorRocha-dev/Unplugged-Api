@@ -72,7 +72,30 @@ export class CommentController {
 		}
 	}
 
+	async searchCommentsByContentsId(req: Request, res: Response) {
+		const { contentsId } = req.params;
+
+		try {
+			const comments = await prisma.comments.findMany({
+				where: {
+					contentsId: parseInt(contentsId),
+				},
+
+				include:{
+					User:{
+						select:{
+							name: true,
+						}
+					}
+				}
+			});
+
+			return res.json({ comments });
+		} catch (error) {
+			console.error('Erro ao buscar comentários:', error);
+			return res.status(500).json({ error: 'Erro ao buscar comentários' });
+		}
+
+	}
+
 }
-
-
-

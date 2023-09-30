@@ -29,7 +29,8 @@ CREATE TABLE "binaural" (
 -- CreateTable
 CREATE TABLE "binauralCategory" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL
+    "name" TEXT NOT NULL,
+    "images" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -72,6 +73,7 @@ CREATE TABLE "contents" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "contents_name" TEXT NOT NULL,
     "contents_type" TEXT NOT NULL DEFAULT 'video',
+    "contets_duration" INTEGER NOT NULL,
     "contents_video_url" TEXT,
     "contents_article" TEXT,
     "modulesId" INTEGER NOT NULL,
@@ -96,9 +98,10 @@ CREATE TABLE "habit" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "description" TEXT,
+    "color" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "completed" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" DATETIME NOT NULL,
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "habit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
