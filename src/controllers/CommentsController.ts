@@ -98,4 +98,62 @@ export class CommentController {
 
 	}
 
+	async editComment(req: Request, res: Response) {
+		const { commentId, userId } = req.params; 
+		const { comments_text} = req.body;
+
+		try {
+			const comment = await prisma.comments.findUnique({
+				where: { id: parseInt(commentId) },
+			});
+
+			if (!comment) {
+				return res.status(404).json({ error: 'Comentário não encontrado' });
+			}
+
+			if (comment.userId !== userId) {
+				return res.status(403).json({ error: 'Você não tem permissão para editar este comentário' });
+			}
+
+			const updatedComment = await prisma.comments.update({
+				where: { id: parseInt(commentId) },
+				data: {
+					comments_text: comments_text,
+				},
+			});
+
+			return res.json(updatedComment);
+		} catch (error) {
+			console.error('Erro ao editar comentário:', error);
+			return res.status(500).json({ error: 'Erro ao editar comentário' });
+		}
+	}
+
+	async deleteComment(req: Request, res: Response) {
+		const { commentId, userId } = req.params; 
+
+		try {
+			const comment = await prisma.comments.findUnique({
+				where: { id: parseInt(commentId) },
+			});
+
+			if (!comment) {
+				return res.status(404).json({ error: 'Comentário não encontrado' });
+			}
+
+			if (comment.userId !== userId) {
+				return res.status(403).json({ error: 'Você não tem permissão para excluir este comentário' });
+			}
+
+			const deletedComment = await prisma.comments.delete({
+				where: { id: parseInt(commentId) },
+			});
+
+			return res.json(deletedComment);
+		} catch (error) {
+			console.error('Erro ao excluir comentário:', error);
+			return res.status(500).json({ error: 'Erro ao excluir comentário' });
+		}
+	}
+
 }
