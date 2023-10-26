@@ -12,11 +12,19 @@ export class BinauralController {
 					binauralCategory: {
 						select: {
 							name: true,
+							images: true
 						},
 					},
 				},
 			});
-			return res.json(binaurals);
+
+			// Atualize o caminho da imagem para cada binaural usando o módulo path
+			const binauralsWithImagePaths = binaurals.map(binaural => ({
+				...binaural,
+				binaural_img: path.join(__dirname, '../images/', binaural.binaural_img)
+			}));
+
+			return res.json(binauralsWithImagePaths);
 		} catch (error) {
 			console.error('Erro ao listar binaurais:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -25,7 +33,7 @@ export class BinauralController {
 
 	async listCategory(req: Request, res: Response) {
 		try {
-			const binauralCategory = await prisma.binauralCategory.findMany({
+			const binauralCategories = await prisma.binauralCategory.findMany({
 				include: {
 					binaural: {
 						select: {
@@ -34,12 +42,19 @@ export class BinauralController {
 							binaural_sound: true,
 							binaural_img: true,
 							binaural_duration: true,
-							binaral_autor:true
+							binaral_autor: true
 						},
 					},
 				},
 			});
-			return res.json(binauralCategory);
+
+			// Atualize o caminho das imagens para cada categoria usando o módulo path
+			const categoriesWithImagePaths = binauralCategories.map(category => ({
+				...category,
+				images: path.join(__dirname, '../images/', category.images)
+			}));
+
+			return res.json(categoriesWithImagePaths);
 		} catch (error) {
 			console.error('Erro ao listar categorias de binaurais:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });

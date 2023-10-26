@@ -16,12 +16,20 @@ export class MeditationController {
 					}
 				}
 			});
-			return res.json(meditations);
+
+			// Atualize o caminho da imagem para cada meditação usando o módulo path
+			const meditationsWithImagePaths = meditations.map(meditation => ({
+				...meditation,
+				meditation_img: path.join(__dirname, '../images/', meditation.meditation_img)
+			}));
+
+			return res.json(meditationsWithImagePaths);
 		} catch (error) {
 			console.error('Erro ao listar meditações:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+
 
 	// Listar todas as categorias de meditações com seus detalhes
 	async listCategory(req: Request, res: Response) {

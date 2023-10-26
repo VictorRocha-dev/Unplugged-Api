@@ -12,5 +12,7 @@ router.put('/:contentId', contentController.updateContent);
 router.post('/postvideo' , upload.single('video') , contentController.responsevideomove);
 router.put('/:idcontent' , contentController.updateContent);
 router.delete('/:contentId' , contentController.deleteContent);
+router.post('/:contentId/like', contentController.likeComment);
+
 
 export default router;

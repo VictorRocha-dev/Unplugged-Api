@@ -108,6 +108,7 @@ model Contents {
   contets_duration   Int
   contents_video_url String?
   contents_article   String?
+  contents_likes     Int     @default(0)
   modules            Modules @relation(fields: [modulesId], references: [id])
   modulesId          Int
 

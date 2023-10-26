@@ -84,7 +84,7 @@ export class CommentController {
 				include:{
 					User:{
 						select:{
-							name: true,
+							nickname: true,
 						}
 					}
 				}

@@ -116,6 +116,25 @@ export class ContentController {
 			res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	async likeComment(req: Request, res: Response) {
+		const { contentId } = req.params;
+
+		try {
+			const comment = await prisma.contents.update({
+				where: { id: parseInt(contentId) },
+				data: {
+					contents_likes: {
+						increment: 1,
+					},
+				},
+			});
+
+			return res.json(comment);
+		} catch (error) {
+			console.error('Error liking comment:', error);
+			return res.status(500).json({ error: 'An error occurred while liking the comment' });
+		}
+	}
 
 	// Atualizar informações de um conteúdo existente
 	async updateContent(req: Request, res: Response) {
