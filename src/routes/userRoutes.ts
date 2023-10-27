@@ -10,7 +10,11 @@ const authController = new AuthController();
 router.get('/',  userController.index);
 router.get('/userAuthenticated'  ,authMiddleware , authController.userAuthentication);
 router.post('/create', userController.store);
+
+
 router.put('/update', userController.update);
+
+
 router.post('/auth' , authController.authenticate);
 
 export default router;

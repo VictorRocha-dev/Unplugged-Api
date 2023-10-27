@@ -116,6 +116,7 @@ export class ContentController {
 			res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	
 	async likeComment(req: Request, res: Response) {
 		const { contentId } = req.params;
 

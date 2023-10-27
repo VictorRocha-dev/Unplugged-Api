@@ -18,13 +18,10 @@ export class BinauralController {
 				},
 			});
 
-			// Atualize o caminho da imagem para cada binaural usando o módulo path
-			const binauralsWithImagePaths = binaurals.map(binaural => ({
-				...binaural,
-				binaural_img: path.join(__dirname, '../images/', binaural.binaural_img)
-			}));
+			
 
-			return res.json(binauralsWithImagePaths);
+
+			return res.json(binaurals);
 		} catch (error) {
 			console.error('Erro ao listar binaurais:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -48,13 +45,8 @@ export class BinauralController {
 				},
 			});
 
-			// Atualize o caminho das imagens para cada categoria usando o módulo path
-			const categoriesWithImagePaths = binauralCategories.map(category => ({
-				...category,
-				images: path.join(__dirname, '../images/', category.images)
-			}));
 
-			return res.json(categoriesWithImagePaths);
+			return res.json(binauralCategories);
 		} catch (error) {
 			console.error('Erro ao listar categorias de binaurais:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });
