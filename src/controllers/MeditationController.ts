@@ -93,7 +93,7 @@ export class MeditationController {
 			return res.json(create);
 		} catch (error) {
 			console.error('Erro ao criar meditação:', error);
-			return res.status(500).json({ error: 'Erro interno do servidor' });
+			return res.status(500).json({ error: 'Erro interno do sernpvidor' });
 		}
 	}
 

@@ -16,7 +16,7 @@ model User {
   email     String  @unique
   password  String
   nickname  String
-  img_user  String?
+  img_user  String  @default("user_default.png")
   street    String?
   number    Int?
   city      String?

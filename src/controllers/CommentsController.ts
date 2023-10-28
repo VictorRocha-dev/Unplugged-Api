@@ -85,6 +85,7 @@ export class CommentController {
 					User:{
 						select:{
 							nickname: true,
+							img_user: true
 						}
 					}
 				}
