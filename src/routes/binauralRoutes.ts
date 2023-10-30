@@ -7,6 +7,8 @@ const binauralController = new BinauralController();
 
 // Rotas para as categorias de binaural
 router.get('/listCategory' , binauralController.listCategory);
+router.get('/listCategoryAdm' , binauralController.listCategoryAdmin);
+
 router.post('/createBinauralCategory', binauralController.createCategory);
 router.put('/binauralCategories/:categoryId', binauralController.updateCategory);
 router.delete('/binauralCategories/:categoryId', binauralController.deleteCategory);
@@ -15,6 +17,8 @@ router.get('/listCategory/:id' , binauralController.listCategoryById);
 
 // Rotas para os sons binaurais
 router.get('/' , binauralController.listBinaural);
+router.get('/binauraladm' , binauralController.listBinauralAdmin);
+
 router.post('/', binauralController.createBinaural);
 router.put('/:binauralId', binauralController.updateBinaural);
 router.delete('/:binauralId', binauralController.deleteBinaural);

@@ -24,6 +24,27 @@ export class MeditationController {
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	async listMeditationadmin(req: Request, res: Response) {
+		try {
+			const meditations = await prisma.meditation.findMany({
+				include: {
+					meditation_category: {
+						select: {
+							name: true
+						}
+					}
+				}
+			});
+
+
+			return res.json({meditations});
+		} catch (error) {
+			console.error('Erro ao listar meditações:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+	
+	
 
 
 	// Listar todas as categorias de meditações com seus detalhes
@@ -43,6 +64,35 @@ export class MeditationController {
 				}
 			});
 			return res.json(meditationsCategory);
+		} catch (error) {
+			console.error('Erro ao listar categorias de meditações:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async listCategoryadmin(req: Request, res: Response) {
+		try {
+			const meditationsCategory = await prisma.meditationCategory.findMany({
+				include: {
+					meditation: {
+						select: {
+							id: true,
+							meditation_name: true,
+							meditation_sound: true,
+							meditation_img: true,
+							meditation_duration: true
+						}
+					}
+				}
+			});
+			const meditations = meditationsCategory.map((meditations) => ({
+				id: meditations.id,
+				name: meditations.name,
+				meditations: meditations.meditation.length
+
+			}));
+
+			return res.json({meditations});
 		} catch (error) {
 			console.error('Erro ao listar categorias de meditações:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });

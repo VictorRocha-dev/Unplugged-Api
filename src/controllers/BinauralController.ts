@@ -27,6 +27,28 @@ export class BinauralController {
 			return res.status(500).json({ error: 'Erro interno do servidor' });
 		}
 	}
+	async listBinauralAdmin(req: Request, res: Response) {
+		try {
+			const binaurals = await prisma.binaural.findMany({
+				include: {
+					binauralCategory: {
+						select: {
+							name: true,
+							images: true
+						},
+					},
+				},
+			});
+
+			
+
+
+			return res.json({binaurals});
+		} catch (error) {
+			console.error('Erro ao listar binaurais:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
 
 	async listCategory(req: Request, res: Response) {
 		try {
@@ -47,6 +69,37 @@ export class BinauralController {
 
 
 			return res.json(binauralCategories);
+		} catch (error) {
+			console.error('Erro ao listar categorias de binaurais:', error);
+			return res.status(500).json({ error: 'Erro interno do servidor' });
+		}
+	}
+
+	async listCategoryAdmin(req: Request, res: Response) {
+		try {
+			const binauralCategories = await prisma.binauralCategory.findMany({
+				include: {
+					binaural: {
+						select: {
+							id: true,
+							binaural_name: true,
+							binaural_sound: true,
+							binaural_img: true,
+							binaural_duration: true,
+							binaral_autor: true
+						},
+					},
+				},
+			});
+			const binaurals = binauralCategories.map((binaural) => ({
+				id: binaural.id,
+				name: binaural.name,
+				binaural: binaural.binaural.length
+
+			}));
+
+
+			return res.json({binaurals});
 		} catch (error) {
 			console.error('Erro ao listar categorias de binaurais:', error);
 			return res.status(500).json({ error: 'Erro interno do servidor' });

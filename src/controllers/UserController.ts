@@ -104,12 +104,12 @@ export class UserController {
 
 	async update(req: Request, res: Response) {
 		try {
-			const token = req.headers.authorization?.split(' ')[1]; // Obtém o token Bearer do header
+			const token = req.headers.authorization?.split(' ')[1]; 
 			if (!token) {
 				return res.status(401).json('Unauthorized');
 			}
 
-			const decodedToken: any = jwt.verify(token, env.TOKEN_KEY); // Verifica o token
+			const decodedToken: any = jwt.verify(token, env.TOKEN_KEY); 
 			const userId = decodedToken.id;
 
 			const {
@@ -137,13 +137,12 @@ export class UserController {
 				return res.status(404).json('User not found');
 			}
 
-			// Hash da nova senha, se fornecida
+			
 			let hashPassword = user.password;
 			if (password) {
 				hashPassword = await hash(password, 8);
 			}
-
-			// Atualiza os dados do usuário
+			
 			const updatedUser = await prisma.user.update({
 				where: {
 					id: userId,
