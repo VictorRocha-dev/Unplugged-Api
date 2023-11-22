@@ -82,12 +82,8 @@ export class HabitController {
 					habit: {
 						userId: userId,
 					},
-					completed: true,
 					dayOfWeek: dayOfWeek,
-				},
-				include: {
-					habit: true, 
-				},
+				}
 			});
 
 			return res.json(completedHabitsByDayOfWeek);
@@ -291,7 +287,3 @@ export class HabitController {
 
 
 }
-	
-
-
-
